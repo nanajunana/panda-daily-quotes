@@ -1,0 +1,29 @@
+import requests
+import tkinter
+
+def get_quotes():
+    response = requests.get(url='https://qapi.vercel.app/api/random')
+    authors = response.json()['author']
+    quotes = response.json()['quote']
+    return quotes, authors
+
+def new_quotes():
+    new_quote, new_author = get_quotes()
+    canvas.itemconfig(quotes_display, text=f'{new_quote}\n-{new_author}')
+
+quote, author = get_quotes()
+
+win = tkinter.Tk()
+win.title('Panda Quotes')
+
+canvas = tkinter.Canvas(width=362, height=290, highlightthickness=0)
+panda = tkinter.PhotoImage(file='panda_icon.png')
+bubble = tkinter.PhotoImage(file='pngtree.png')
+canvas.create_image(181,181,image=bubble)
+quotes_display = canvas.create_text(181,140,text=f'{quote}\n-{author}',width=200)
+canvas.grid(column=0,row=0)
+
+panda_button = tkinter.Button(image=panda, width=100, height=100, command=new_quotes)
+panda_button.grid(column=0,row=1)
+
+win.mainloop()
